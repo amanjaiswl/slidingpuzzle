@@ -1,9 +1,7 @@
-// components/Tile.js
 import React from "react";
 import { Pressable, Image, StyleSheet } from "react-native";
-import tileSrc from "../utils/tileSrc";          // ← new import
 
-export default function Tile({ id, onPress, size }) {
+export default function Tile({ id, onPress, size, tileSrc }) {
   if (id === null) {
     return <Pressable style={[styles.blank, { width: size, height: size }]} />;
   }

@@ -1,6 +1,5 @@
-// components/PuzzleBoard.js
 import React, { useState } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import ConfettiCannon from "react-native-confetti-cannon";
 import Tile from "./Tile";
 import {
@@ -10,40 +9,58 @@ import {
   isSolved,
 } from "../utils/puzzle";
 
-export default function PuzzleBoard({ size = 300 }) {
+export default function PuzzleBoard({ tileSrc, onSolved, size = 360 }) {
   const [state, setState] = useState(shuffleSolvable());
   const [done, setDone] = useState(false);
-
   const tileSize = size / 3;
 
-  const tryMove = (idx) => {
+  const handle = (idx) => {
     if (done) return;
     if (legalMoves(state).includes(idx)) {
       const next = move(state, idx);
       setState(next);
-      if (isSolved(next)) setDone(true);
+      if (isSolved(next)) {
+        setDone(true);
+        onSolved && onSolved();
+      }
     }
   };
 
   return (
-    <View style={[styles.board, { width: size, height: size }]}>
+    <View style={[styles.wrap, { width: size, height: size }]}>
       {state.map((id, i) => (
         <Tile
           key={i}
           id={id}
           size={tileSize}
-          onPress={() => tryMove(i)}
+          tileSrc={tileSrc}
+          onPress={() => handle(i)}
         />
       ))}
-      {done && <ConfettiCannon count={180} origin={{x: size/2, y: size/2}} />}
+      {done && (
+        <>
+          <ConfettiCannon
+            count={300}
+            fallSpeed={2500}
+            fadeOut
+            origin={{ x: size / 2, y: -10 }}
+          />
+          <View style={styles.overlay}>
+            <Text style={styles.big}>🎉 Solved!</Text>
+          </View>
+        </>
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  board: {
-    flexDirection: "row",
-    flexWrap: "wrap",
+  wrap: { flexDirection: "row", flexWrap: "wrap" },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    alignItems: "center",
+    justifyContent: "center",
   },
+  big: { fontSize: 40, fontWeight: "700" },
 });
 
