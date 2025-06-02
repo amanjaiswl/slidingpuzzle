@@ -1,10 +1,17 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from "react";
+import { StatusBar } from "expo-status-bar";
+import { View, Image, StyleSheet } from "react-native";
+import PuzzleBoard from "./components/PuzzleBoard";
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+      {/* miniature reference, top-left */}
+      <Image
+        source={require("./assets/mickey.png")}
+        style={styles.thumb}
+      />
+      <PuzzleBoard size={330} />
       <StatusBar style="auto" />
     </View>
   );
@@ -13,8 +20,19 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    paddingTop: 60,
+    backgroundColor: "#f5f5f5",
+  },
+  thumb: {
+    position: "absolute",
+    top: 10,
+    left: 10,
+    width: 70,
+    height: 70,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#ccc",
   },
 });
+
